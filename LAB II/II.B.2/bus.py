@@ -13,7 +13,7 @@ def choose_next_route(current_route, routes, waiting_passengers, bus_count_per_r
 
     # Find routes that start at the last stop of the current route and have fewer than two buses
     for route in routes:
-        if routes[route]['S'][0] == last_stop and bus_count_per_route[route] < 2:
+        if routes[route]['S'][0] == last_stop and bus_count_per_route[route] < param.max_bus_count:
             potential_routes.append(route)
 
     # Choose the route with the most passengers waiting at all stops

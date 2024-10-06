@@ -10,7 +10,7 @@ def simulation(n_buses, n_simulations):
     utils = []  # List to store average utilization per simulation
     passenger_travel_times = []
     for _ in range(n_simulations):
-        id = 0
+        passenger_id = 0
         env = sp.Environment()
 
         all_stops = set()  # Set to store all stops
@@ -38,23 +38,23 @@ def simulation(n_buses, n_simulations):
         # Start passenger generators for each stop with their respective rates
         passenger_arrival_rates = param.passenger_arrival_rates
         for stop, rate in passenger_arrival_rates.items():
-            env.process(passenger_generator(id, env, str(stop), waiting_passengers[str(stop)], rate))  # Generate passengers for each stop
+            env.process(passenger_generator(passenger_id, env, str(stop), waiting_passengers[str(stop)], rate))  # Generate passengers for each stop
         
         # Start bus processes
-        for id in range(n_buses):
-            bus = Bus(env, param.routes, choose_init_route(), waiting_passengers, util, id, travel_time)
+        for bus_id in range(n_buses):
+            bus = Bus(env, param.routes, choose_init_route(), waiting_passengers, util, bus_id, travel_time)
             env.process(bus.run(bus_count_per_route, idle_queue))
             bus_count_per_route[bus.current_route] += 1
         
         env.run(until=100) # Simulate for 100 time units
 
         # Calculate average utilization and travel time across all buses in this simulation
-        avg_util = np.mean([np.mean(util[id]) for id in util if util[id]])
+        avg_util = np.mean([np.mean(util[bus_id]) for bus_id in util if util[bus_id]])
         utils.append(avg_util)
-        avg_travel_time = np.mean([np.mean(travel_time[id]) for id in travel_time if travel_time[id]])
+        avg_travel_time = np.mean([np.mean(travel_time[bus_id]) for bus_id in travel_time if travel_time[bus_id]])
         passenger_travel_times.append(avg_travel_time)
     
-    print(f'For {n_buses} buses:')
+    print(f'For {n_buses} buses (restriction to {param.max_bus_count} buses per route):')
     print(f'Average utilisation across all simulations: {round(np.mean(utils), 3)}')
     print(f'Standard error for utilisation: {round(np.std(utils) / np.sqrt(n_simulations), 3)}')
     print(f'Average travel time accross all simulations: {round(np.mean(passenger_travel_times), 1)}')

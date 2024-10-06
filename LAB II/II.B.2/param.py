@@ -5,6 +5,7 @@ n_buses_list = [5, 7, 10, 15] # for comparing util
 n_simulations = 15 # number of simulations
 c = 20 # number of seats in each bus
 q = 0.3 # probability of a passenger leaving at a stop
+max_bus_count = 2 # maximum number of buses per route
 
 travel_times = {
     'R 1': 3, 'R 2': 7, 'R 3': 6, 

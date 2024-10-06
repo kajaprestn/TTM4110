@@ -9,7 +9,7 @@ def simulation(n_buses, n_simulations):
     utils = []  # List to store average utilization per simulation
     passenger_travel_times = []
     for _ in range(n_simulations):
-        id = 0
+        passenger_id = 0
         env = sp.Environment()
 
         all_stops = set()  # Set to store all stops
@@ -33,7 +33,7 @@ def simulation(n_buses, n_simulations):
         # Start passenger generators for each stop with their respective rates
         passenger_arrival_rates = param.passenger_arrival_rates
         for stop, rate in passenger_arrival_rates.items():
-            env.process(passenger_generator(id, env, str(stop), waiting_passengers[str(stop)], rate))  # Generate passengers for each stop
+            env.process(passenger_generator(passenger_id, env, str(stop), waiting_passengers[str(stop)], rate))  # Generate passengers for each stop
         
         # Start bus processes
         for id in range(n_buses):
