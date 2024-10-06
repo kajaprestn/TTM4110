@@ -27,7 +27,6 @@ def choose_next_route(current_route, routes, waiting_passengers, bus_count_per_r
 
     return best_route
 
-
 class Bus:
     def __init__(self, env, routes, current_route, waiting_passengers, util, id, passenger_travel_times):
         self.env = env
